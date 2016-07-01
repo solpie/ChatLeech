@@ -1,0 +1,31 @@
+{
+  "name": "ChatLeecher",
+  "description": "ChatLeecher",
+  "version": "0.0",
+  "minimum_chrome_version": "16.0.884",
+  "web_accessible_resources": [
+    "panel.html"
+  ],
+  "permissions": [
+    "tabs",
+    "<all_urls>"
+  ],
+  "browser_action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://www.douyu.com/*"
+      ],
+      "css": [
+        "style.css"
+      ],
+      "js": [
+        "js/jquery.js",
+        "main.js"
+      ]
+    }
+  ],
+  "manifest_version": 2
+}

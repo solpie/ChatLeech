@@ -1,0 +1,25 @@
+{
+  "name": "chatleecher",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "watch": "webpack --watch --progress --profile --colors --disZplay-error-details --display-cached --config webpack.config.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "json-loader": "^0.5.4",
+    "source-map-loader": "^0.1.5",
+    "ts-loader": "^0.8.2",
+    "tsd": "^0.6.5",
+    "typescript": "^1.8.10",
+    "webpack": "^1.13.1",
+    "webpack-node-externals": "^1.2.0"
+  },
+  "dependencies": {
+    "ent": "^2.2.0",
+    "entities": "^1.1.1"
+  }
+}
