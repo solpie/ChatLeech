@@ -26,6 +26,11 @@ module.exports = {
         extensions: ["", ".ts", ".tsx", ".html", ".js"]
     },
     plugins: [
+        new webpack.DefinePlugin({
+            'process.env': {
+                NODE_ENV: '"production"'
+            }
+        }),
         new webpack.optimize.UglifyJsPlugin({
             compress: {
                 warnings: false

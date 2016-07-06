@@ -1,23 +1,36 @@
 import entities = require('entities');
+import {DmkInfo} from "../../yqbe/src/model/DmkInfo";
+
 declare var $;
+declare var chrome;
 declare interface entities {
     decodeHTML(val:string):string;
 }
-class Dmk {
-    user:string;
-    text:string;
-    id:string;
-}
 class ChatLeecher {
-    dmkArr:Dmk[];
+    dmkArr:DmkInfo[];
     lastLength:number = 0;
 
+
+    //
+    options:any;
+
+    restore_options() {
+        // Use default value color = 'red' and likesColor = true.
+        chrome.storage.sync.get({
+            serverAddr: '',
+        }, (items)=> {
+            this.options = items;
+            console.log('server addr', items.serverAddr);
+        });
+    }
+
     constructor() {
+        this.restore_options();
         console.log("chatLeecher");
         this.dmkArr = [];
         var start = 0;
         setInterval(()=> {
-            var dmkItemArr$ = $('.jschartli .text_cont');
+            var dmkItemArr$ = $('.jschartli .text-cont');
             if (dmkItemArr$.length) {
                 if (this.lastLength != dmkItemArr$.length) {
                     if (this.lastLength != 0)
@@ -26,17 +39,20 @@ class ChatLeecher {
                     // console.log('start', start, 'len', dmkItemArr$.length);
                     for (var i = start; i < dmkItemArr$.length; i++) {
                         var dmkItem$ = $(dmkItemArr$[i]);
-                        var dmkId = dmkItem$.find('.text_cont').attr('chatid');
-                        var dmkText = entities.decodeHTML(dmkItem$.find('.text_cont').html());
+                        var dmkId = dmkItem$.find('.text-cont').attr('chatid');
+                        var dmkText = entities.decodeHTML(dmkItem$.find('.text-cont').html());
                         var dmkUserName = dmkItem$.find('.name a').html();
                         if (dmkId) {
-                            console.log('dmk: ', `[${dmkUserName}]`,dmkId, dmkText);
-
-                            var dmk = new Dmk();
+                            console.log('dmk: ', `[${dmkUserName}]`, dmkText, dmkId);
+                            var dmk:any = new DmkInfo();
                             dmk.id = dmkId;
                             dmk.text = dmkText;
                             dmk.user = dmkUserName;
                             this.dmkArr.push(dmk);
+                            var data:any = {user: dmkUserName, text: dmkText};
+                            $.post(this.options.serverAddr + '/dmk/push', data, ()=> {
+                                console.log('sus');
+                            })
                         }
                     }
                 }
