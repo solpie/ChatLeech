@@ -18,7 +18,9 @@
   "content_scripts": [
     {
       "matches": [
-        "*://www.douyu.com/*"
+        "*://www.douyu.com/*",
+        "*://www.videohupu.com/*",
+        "*://zhubo.kanqiu.hupu.com/*"
       ],
       "css": [
         "style.css"
