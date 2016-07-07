@@ -9,7 +9,7 @@ declare interface entities {
 class ChatLeecher {
     dmkArr:DmkInfo[];
     lastLength:number = 0;
-
+    isRunning:boolean = false;
 
     //
     options:any;
@@ -31,7 +31,14 @@ class ChatLeecher {
                 console.log('init ui');
                 $('.function-button').append('<a href="javascript:" title="开启直播" id="btnStart" class="button-send">开始抓取</a>');
                 $('#btnStart').on('click', ()=> {
-                    this.leechHupuZhushou();
+                    if (!this.isRunning) {
+                        this.leechHupuZhushou();
+                        $('#btnStart').val('停止抓取');
+                    }
+                    else {
+                        // this.isRunning = false;
+                    }
+
                     console.log('start!!!!', window.location, hostname);
                 });
             }
@@ -84,11 +91,14 @@ class ChatLeecher {
     }
 
     leechHupuZhushou() {
+        if (this.isRunning)
+            return;
+        this.isRunning = true;
         console.log('leechHupu');
         this.dmkArr = [];
         var start = 0;
 
-        setInterval(()=> {
+        var timer = setInterval(()=> {
             var dmkItemArr$ = $('#J_hotline tr');
             if (dmkItemArr$.length) {
                 if (this.lastLength != dmkItemArr$.length) {
@@ -126,22 +136,27 @@ class ChatLeecher {
                             var skillIdx;
                             var playerIdx;
                             if (skillName == '安妮连杆') {
-                                skillIdx = 1;
-                                playerIdx = 1;
+                                skillIdx = 0;
+                                playerIdx = 0;
                             }
                             else if (skillName == '堂主连杆') {
-                                skillIdx = 1;
-                                playerIdx = 2;
-                            }
-                            else if (skillName == '安妮恶魔时光机') {
-                                skillIdx = 2;
+                                skillIdx = 0;
                                 playerIdx = 1;
                             }
-                            else if (skillName == '堂主恶魔时光机') {
-                                skillIdx = 2;
-                                playerIdx = 2;
+                            else if (skillName == '安妮恶魔时光机') {
+                                skillIdx = 1;
+                                playerIdx = 0;
                             }
-                            var data:any = {user: dmkUserName, skillIdx: skillIdx, playerIdx: playerIdx};
+                            else if (skillName == '堂主恶魔时光机') {
+                                skillIdx = 1;
+                                playerIdx = 1;
+                            }
+                            var data:any = {
+                                user: dmkUserName,
+                                skillCount: skillCount,
+                                skillIdx: skillIdx,
+                                playerIdx: playerIdx
+                            };
                             $.post(this.options.serverAddr + '/dmk/push', data, ()=> {
                                 console.log('sus');
                             });
