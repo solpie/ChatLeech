@@ -154,8 +154,8 @@ class ChatLeecher {
                             var data:any = {
                                 user: dmkUserName,
                                 skillCount: skillCount,
-                                skillIdx: skillIdx||1,
-                                playerIdx: playerIdx||1
+                                skillIdx: skillIdx,
+                                playerIdx: playerIdx
                             };
                             $.post(this.options.serverAddr + '/dmk/push', data, ()=> {
                                 console.log('sus');
