@@ -98,6 +98,9 @@ class ChatLeecher {
         this.dmkArr = [];
         var start = 0;
 
+        var sumAnniLiangan = 0
+        var sumTangZhugan = 0
+
         var timer = setInterval(()=> {
             var dmkItemArr$ = $('#J_hotline tr');
             if (dmkItemArr$.length) {
@@ -151,15 +154,46 @@ class ChatLeecher {
                                 skillIdx = 1;
                                 playerIdx = 1;
                             }
-                            var data:any = {
-                                user: dmkUserName,
-                                skillCount: skillCount,
-                                skillIdx: skillIdx,
-                                playerIdx: playerIdx
-                            };
-                            $.post(this.options.serverAddr + '/dmk/push', data, ()=> {
-                                console.log('sus');
-                            });
+
+                            if (skillName == '送安妮杆') {
+                                sumAnniLiangan += skillCount;
+                                var count = Math.floor(sumAnniLiangan / 200);
+                                if (count > 0) {
+                                    skillCount = count;
+                                    skillIdx=0;
+                                    playerIdx=0;
+                                    sumAnniLiangan -= count * 200;
+                                }
+                                else {
+                                    skillCount = 0;
+                                }
+                            }
+                            else if (skillName == '送堂主杆') {
+                                sumTangZhugan += skillCount;
+                                var count = Math.floor(sumTangZhugan / 200);
+                                if (count > 0) {
+                                    skillCount = count;
+                                    skillIdx =0;
+                                    playerIdx = 1;
+                                    sumTangZhugan -= count * 200;
+                                }
+                                else {
+                                    skillCount = 0;
+                                }
+                            }
+                            if(skillCount>0)
+                            {
+                                var data:any = {
+                                    user: dmkUserName,
+                                    skillCount: skillCount,
+                                    skillIdx: skillIdx,
+                                    playerIdx: playerIdx
+                                };
+                                $.post(this.options.serverAddr + '/dmk/push', data, ()=> {
+                                    console.log('sus');
+                                });
+                            }
+
                             console.log('skill:', dmkUserName, skillCount, skillName);
                         }
 
